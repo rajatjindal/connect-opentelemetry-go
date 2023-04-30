@@ -110,13 +110,11 @@ func (i *Interceptor) WrapUnary(next connect.UnaryFunc) connect.UnaryFunc {
 			// if a span already exists in ctx then there must have already been another interceptor
 			// that set it, so don't extract from carrier.
 			if !trace.SpanContextFromContext(ctx).IsValid() {
-				ctx = i.config.propagator.Extract(ctx, carrier)
-				if !i.config.trustRemote {
-					traceOpts = append(traceOpts,
-						trace.WithNewRoot(),
-						trace.WithLinks(trace.LinkFromContext(ctx)),
-					)
-				}
+				remoteCtx := i.config.propagator.Extract(ctx, carrier)
+				traceOpts = append(traceOpts,
+					trace.WithNewRoot(),
+					trace.WithLinks(trace.LinkFromContext(remoteCtx)),
+				)
 			}
 		}
 		traceOpts = append(traceOpts, trace.WithSpanKind(spanKind))

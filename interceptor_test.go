@@ -1403,7 +1403,7 @@ func TestUnaryPropagation(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, len(handlerSpanRecorder.Ended()), 1)
 	assert.Equal(t, len(clientSpanRecorder.Ended()), 1)
-	assertSpanParent(t, rootSpan, clientSpanRecorder.Ended()[0], handlerSpanRecorder.Ended()[0])
+	assertSpanLink(t, rootSpan, clientSpanRecorder.Ended()[0], handlerSpanRecorder.Ended()[0])
 }
 
 func TestUnaryInterceptorPropagation(t *testing.T) {
